@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>Display Category</h1>
+
+<script type="text/javascript">
+  /* This is the solution */
+  function sortCategoriesForInsert (inputJson) {
+    // Your code happens...
+    ///   ... which calculates properJsonOutput
+    let idMap = {};
+    inputJson.forEach(function (value) {
+      idMap[value.id] = value;
+    });
+    function sortByCat(idMapObj, parentId = null, result = []) {
+      for(const property in idMapObj) {
+        if (idMapObj[property].parent_id === parentId) {
+          let idVal = idMapObj[property].id;
+          result.push(idMapObj[property]);
+          delete idMapObj[property];
+          sortByCat(idMapObj, idVal, result);
+        }
+      }
+      return result;
+    }
+    const properJsonOutput = sortByCat(idMap);
+    return properJsonOutput
+  }
+  /* solution end */
+
+  let listVal = sortCategoriesForInsert([
+    {
+      "name": "Accessories",
+      "id": 1,
+      "parent_id": 20,
+    },
+    {
+      "name": "Women",
+      "id": 67,
+      "parent_id": null
+    },
+    {
+      "name": "Watches",
+      "id": 57,
+      "parent_id": 1
+    },
+    {
+      "name": "Men",
+      "id": 20,
+      "parent_id": null
+    }
+  ]);
+
+  function getChildren (selectedCat) {
+    return listVal.filter(function (value) {
+      return selectedCat.id === value.parent_id;
+    });
+  }
+
+  function traverse(list)  {
+    var html = '<ul>';
+    for (var i = 0; i < list.length; i++) {
+      if (!list[i].isTraversed) {
+        html += '<li>' + list[i].name;
+      }
+      list[i].isTraversed = true;
+      var children = getChildren(list[i]);
+      if (children.length > 0) {
+        html += traverse(children);
+      }
+      html += '</li>';
+    }
+    html += '</ul>';
+
+    return html;
+  }
+
+  let htmlVal = traverse(listVal);
+  document.write(htmlVal);
+</script>
+
+</body>
+</html>
