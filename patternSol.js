@@ -174,3 +174,10 @@ const fruits_into_baskets = function(fruits) {
   }
   return maxLength;
 };
+
+
+/* find all anagaram */
+let angagrams = [];
+let generateAnagram = (word, anagram = '') => {
+
+}
